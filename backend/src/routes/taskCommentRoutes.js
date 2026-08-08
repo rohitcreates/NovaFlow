@@ -1,71 +1,62 @@
 import express from "express";
 
-import { createTask,
-    getTasks,
-    getTaskById,
-    updateTask,
-    archiveTask,
- } from "../controllers/taskController.js";
+import {
+    createTaskComment,
+    getTaskComments,
+    updateTaskComment,
+    deleteTaskComment,
+} from "../controllers/taskCommentController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
-
 import { loadWorkspace } from "../middleware/workspaceMiddleware.js";
 
 import {
     loadWorkspaceMembership,
-    isMemberOrOwner,
-    isOwner,
 } from "../middleware/workspacePermissionMiddleware.js";
 
 import { loadProject } from "../middleware/projectMiddleware.js";
+import { loadTask } from "../middleware/taskMiddleware.js";
 
 const router = express.Router();
 
 router.post(
-    "/:workspaceId/projects/:projectId/tasks",
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments",
     protect,
     loadWorkspace,
     loadWorkspaceMembership,
-    isMemberOrOwner,
     loadProject,
-    createTask
+    loadTask,
+    createTaskComment
 );
 
 router.get(
-    "/:workspaceId/projects/:projectId/tasks",
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments",
     protect,
     loadWorkspace,
     loadWorkspaceMembership,
     loadProject,
-    getTasks
-);
-
-router.get(
-    "/:workspaceId/projects/:projectId/tasks/:taskId",
-    protect,
-    loadWorkspace,
-    loadWorkspaceMembership,
-    loadProject,
-    getTaskById
+    loadTask,
+    getTaskComments
 );
 
 router.patch(
-    "/:workspaceId/projects/:projectId/tasks/:taskId",
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments/:commentId",
     protect,
     loadWorkspace,
     loadWorkspaceMembership,
-    isMemberOrOwner,
     loadProject,
-    updateTask
+    loadTask,
+    updateTaskComment
 );
 
-router.patch(
-    "/:workspaceId/projects/:projectId/tasks/:taskId/archive",
+router.delete(
+    "/:workspaceId/projects/:projectId/tasks/:taskId/comments/:commentId",
     protect,
     loadWorkspace,
     loadWorkspaceMembership,
-    isOwner,
     loadProject,
-    archiveTask
+    loadTask,
+    deleteTaskComment
 );
+
 export default router;

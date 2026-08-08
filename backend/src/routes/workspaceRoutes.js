@@ -4,8 +4,8 @@ import {
     createWorkspace,
     getWorkspaces,
      getWorkspaceById,
-    // updateWorkspace,
-    // archiveWorkspace,
+    updateWorkspace,
+    archiveWorkspace,
 } from "../controllers/workspaceController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -28,21 +28,22 @@ router.get(
   loadWorkspaceMembership,
   getWorkspaceById
 );
-// router.patch(
-//   "/:workspaceId",
-//   protect,
-//   loadWorkspace,
-//   loadWorkspaceMembership,
-//   isOwner,
-//   updateWorkspace
-// );
-// router.patch(
-//   "/:workspaceId/archive",
-//   protect,
-//   loadWorkspace,
-//   isOwner,
-//   archiveWorkspace
-// );
+router.patch(
+  "/:workspaceId",
+  protect,
+  loadWorkspace,
+  loadWorkspaceMembership,
+  isOwner,
+  updateWorkspace
+);
+router.patch(
+  "/:workspaceId/archive",
+  protect,
+  loadWorkspace,
+loadWorkspaceMembership,
+  isOwner,
+  archiveWorkspace
+);
 
 
 export default router;
