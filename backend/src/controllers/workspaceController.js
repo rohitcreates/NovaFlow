@@ -44,21 +44,23 @@ export const createWorkspace = async (req, res) => {
 
 export const getWorkspaces = async (req, res) => {
   try {
-  const memberships = await WorkspaceMember.find({
-  user: req.user._id,
-}).populate("workspace");
+    const memberships = await WorkspaceMember.find({
+      user: req.user._id,
+    }).populate("workspace");
 
-const workspaces = memberships.map(
-  (membership) => membership.workspace
-);
+    const workspaces = memberships.map(
+      (membership) => membership.workspace
+    );
 
-return res.status(200).json({
-  workspaces,
-});
-
+    return res.status(200).json({
+      workspaces,
+    });
   } catch (error) {
     console.error("Error fetching workspaces:", error);
-    return res.status(500).json({ message: "Internal server error" });
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 
@@ -132,5 +134,30 @@ export const archiveWorkspace = async (req, res) => {
         });
     }
 };
+export const uploadWorkspaceCover = async (req, res) => {
+  try {
+    const workspace = req.workspace;
 
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Cover image is required",
+      });
+    }
+
+    workspace.coverImage = `/uploads/workspaces/${req.file.filename}`;
+
+    await workspace.save();
+
+    return res.status(200).json({
+      message: "Workspace cover updated successfully",
+      workspace,
+    });
+  } catch (error) {
+    console.error("Error uploading workspace cover:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
 

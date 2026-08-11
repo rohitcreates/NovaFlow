@@ -27,7 +27,7 @@ const workspaceSchema = new mongoose.Schema({
     required: true,
     },
 
-    isArchived: {
+    archived: {
         type: Boolean,
         default: false,
     },
