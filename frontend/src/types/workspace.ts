@@ -12,11 +12,3 @@ export type Workspace = {
   updatedAt: string;
 };
 
-export type WorkspaceMember = {
-  _id: string;
-  workspace: string;
-  user: User;
-  role: WorkspaceRole;
-  createdAt: string;
-  updatedAt: string;
-};

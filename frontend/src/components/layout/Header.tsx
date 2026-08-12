@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import InvitationButton from "@/components/invitations/InvitationButton";
 
 export default function Header() {
   const pathname = usePathname();
@@ -51,6 +52,10 @@ export default function Header() {
               <path d="M9 21v-6h6v6" />
             </svg>
           </Link>
+
+          {/* Invitations */}
+          <InvitationButton 
+          />
 
           {/* Profile */}
           <Link
