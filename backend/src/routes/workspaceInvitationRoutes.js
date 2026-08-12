@@ -1,7 +1,10 @@
 import express from "express";
 
 import {
-    createInvitation,acceptInvitation,
+    createInvitation,
+    getMyInvitations,
+    acceptInvitation,
+    declineInvitation,
 } from "../controllers/workspaceInvitationController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -15,6 +18,9 @@ import {
 
 const router = express.Router();
 
+
+// Create invitation
+// Owner only
 router.post(
     "/:workspaceId/invitations",
     protect,
@@ -24,10 +30,29 @@ router.post(
     createInvitation
 );
 
+
+// Get current user's pending invitations
+router.get(
+    "/invitations/me",
+    protect,
+    getMyInvitations
+);
+
+
+// Accept invitation
 router.post(
     "/invitations/:token/accept",
     protect,
     acceptInvitation
 );
+
+
+// Decline invitation
+router.post(
+    "/invitations/:token/decline",
+    protect,
+    declineInvitation
+);
+
 
 export default router;

@@ -139,3 +139,45 @@ export const archiveProject = async (req, res) => {
         });
     }
 };
+
+export const uploadProjectCover = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Cover image is required",
+      });
+    }
+
+    const project = await Project.findOne({
+      _id: projectId,
+      workspace: req.workspace._id,
+      archived: false,
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        message: "Project not found",
+      });
+    }
+
+    project.coverImage = `/uploads/projects/${req.file.filename}`;
+
+    await project.save();
+
+    return res.status(200).json({
+      message: "Project cover updated successfully",
+      project,
+    });
+  } catch (error) {
+    console.error(
+      "Error uploading project cover:",
+      error
+    );
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
