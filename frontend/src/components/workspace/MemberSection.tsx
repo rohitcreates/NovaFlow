@@ -5,12 +5,19 @@ type MemberSectionProps = {
   members: WorkspaceMember[];
   currentUserId: string;
   onInviteMember: () => void;
+  onChangeMemberRole: (
+    memberId: string,
+    role: "member" | "viewer"
+  ) => Promise<void>;
+  onRemoveMember: (memberId: string) => Promise<void>;
 };
 
 export default function MemberSection({
   members,
   currentUserId,
   onInviteMember,
+  onChangeMemberRole,
+  onRemoveMember,
 }: MemberSectionProps) {
   return (
     <section className="border-t border-gray-200 px-8 py-10">
@@ -36,7 +43,7 @@ export default function MemberSection({
       </div>
 
       {members.length > 0 ? (
-        <div className="mt-7 overflow-hidden rounded-2xl border border-gray-200 bg-white">
+        <div className="mt-7 overflow-visible rounded-2xl border border-gray-200 bg-white">
           {members.map((member, index) => (
             <div
               key={member._id}
@@ -49,6 +56,8 @@ export default function MemberSection({
               <MemberRow
                 member={member}
                 isCurrentUser={member.user._id === currentUserId}
+                onChangeRole={onChangeMemberRole}
+                onRemove={onRemoveMember}
               />
             </div>
           ))}

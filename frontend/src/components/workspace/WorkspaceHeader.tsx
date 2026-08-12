@@ -1,4 +1,5 @@
 import type { Workspace } from "@/types/workspace";
+import { getMediaUrl } from "@/lib/media";
 
 type WorkspaceHeaderProps = {
   workspace: Workspace;
@@ -12,12 +13,12 @@ export default function WorkspaceHeader({
   return (
     <section>
       {/* Cover */}
-      <div className="relative h-80 overflow-hidden bg-gray-200">
-        {workspace.coverImage ? (
-          <img
-            src={workspace.coverImage}
+      <div className="relative h-[350px] overflow-hidden bg-gray-200">
+       {getMediaUrl(workspace.coverImage) ? (
+      <img
+        src={getMediaUrl(workspace.coverImage) ?? undefined}
             alt={`${workspace.name} cover`}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-center"
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400" />

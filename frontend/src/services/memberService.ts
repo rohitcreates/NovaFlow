@@ -1,5 +1,8 @@
 import { apiFetch } from "@/lib/api";
-import { WorkspaceMember, WorkspaceRole } from "@/types/workspaceMember";
+import type {
+  WorkspaceMember,
+  WorkspaceRole,
+} from "@/types/workspaceMember";
 
 export const getWorkspaceMembers = async (
   workspaceId: string
@@ -15,10 +18,10 @@ export const removeWorkspaceMember = async (
   workspaceId: string,
   memberId: string
 ) => {
-  await apiFetch(
+  return apiFetch(
     `/workspaces/${workspaceId}/members/${memberId}`,
     {
-      method: "DELETE"
+      method: "DELETE",
     }
   );
 };
@@ -28,11 +31,11 @@ export const updateWorkspaceMemberRole = async (
   memberId: string,
   role: WorkspaceRole
 ) => {
-  await apiFetch(
+  return apiFetch(
     `/workspaces/${workspaceId}/members/${memberId}`,
     {
       method: "PATCH",
-      body: JSON.stringify({ role })
+      body: JSON.stringify({ role }),
     }
   );
 };

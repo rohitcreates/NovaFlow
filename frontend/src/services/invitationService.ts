@@ -1,47 +1,51 @@
 import { apiFetch } from "@/lib/api";
-import type { WorkspaceInvitation } from "@/types/workspaceInvitation";
-import type { WorkspaceRole } from "@/types/workspaceMember";
+
+export type InvitationRole = "member" | "viewer";
+
+export type CreateInvitationData = {
+  email: string;
+  role: InvitationRole;
+};
 
 export const createInvitation = async (
   workspaceId: string,
-  email: string,
-  role: WorkspaceRole
-): Promise<WorkspaceInvitation> => {
-  const response = await apiFetch(
+  data: CreateInvitationData
+) => {
+  return apiFetch(
     `/workspaces/${workspaceId}/invitations`,
     {
       method: "POST",
-      body: JSON.stringify({ email, role }),
+      body: JSON.stringify(data),
     }
   );
-
-  return response.invitation;
 };
 
-export const getMyInvitations = async (): Promise<WorkspaceInvitation[]> => {
-  const response = await apiFetch("/workspaces/invitations/me");
+export const getMyInvitations = async () => {
+  const response = await apiFetch(
+    "/workspaces/invitations/me"
+  );
 
   return response.invitations;
 };
 
-export const acceptInvitation = async (token: string) => {
-  const response = await apiFetch(
+export const acceptInvitation = async (
+  token: string
+) => {
+  return apiFetch(
     `/workspaces/invitations/${token}/accept`,
     {
       method: "POST",
     }
   );
-
-  return response;
 };
 
-export const declineInvitation = async (token: string) => {
-  const response = await apiFetch(
+export const declineInvitation = async (
+  token: string
+) => {
+  return apiFetch(
     `/workspaces/invitations/${token}/decline`,
     {
       method: "POST",
     }
   );
-
-  return response;
 };
