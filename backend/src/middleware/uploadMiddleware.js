@@ -2,61 +2,51 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 
-const uploadDirectory = "uploads/tasks";
+const uploadDirectory = "uploads/avatars";
 
 if (!fs.existsSync(uploadDirectory)) {
-    fs.mkdirSync(uploadDirectory, { recursive: true });
+  fs.mkdirSync(uploadDirectory, { recursive: true });
 }
 
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, uploadDirectory);
-    },
+  destination: (req, file, cb) => {
+    cb(null, uploadDirectory);
+  },
 
-    filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${Math.round(
-            Math.random() * 1e9
-        )}${path.extname(file.originalname)}`;
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${Math.round(
+      Math.random() * 1e9
+    )}${path.extname(file.originalname)}`;
 
-        cb(null, uniqueName);
-    },
+    cb(null, uniqueName);
+  },
 });
 
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = [
-        "application/pdf",
+  const allowedTypes = [
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+  ];
 
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-
-        "application/vnd.ms-excel",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-
-        "application/vnd.ms-powerpoint",
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-
-        "text/plain",
-
-        "image/png",
-        "image/jpeg",
-        "image/webp",
-
-        "application/zip",
-    ];
-
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error("File type is not allowed"), false);
-    }
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "Only PNG, JPEG, and WebP images are allowed"
+      ),
+      false
+    );
+  }
 };
 
-const upload = multer({
-    storage,
-    fileFilter,
-    limits: {
-        fileSize: 10 * 1024 * 1024,
-    },
+const avatarUpload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
 });
 
-export default upload;
+export default avatarUpload;

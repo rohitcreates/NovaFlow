@@ -4,6 +4,7 @@ export type WorkspaceMemberUser = {
   _id: string;
   name: string;
   email: string;
+  avatar: string | null;
 };
 
 export type WorkspaceMember = {

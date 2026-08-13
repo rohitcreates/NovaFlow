@@ -76,3 +76,67 @@ export const loginUser = async (req, res) => {
 export const getMe = (req, res) => {
   res.status(200).json(req.user);
 };
+
+export const updateMe = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (name !== undefined) {
+      if (!name.trim()) {
+        return res.status(400).json({
+          message: "Name cannot be empty",
+        });
+      }
+
+      req.user.name = name.trim();
+    }
+
+    await req.user.save();
+
+    return res.status(200).json({
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        avatar: req.user.avatar,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+
+export const uploadAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Avatar image is required",
+      });
+    }
+
+    req.user.avatar = `/uploads/avatars/${req.file.filename}`;
+
+    await req.user.save();
+
+    return res.status(200).json({
+      message: "Avatar updated successfully",
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        avatar: req.user.avatar,
+      },
+    });
+  } catch (error) {
+    console.error("Error uploading avatar:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};

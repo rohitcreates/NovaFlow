@@ -3,6 +3,8 @@
 import { useState } from "react";
 import type { WorkspaceMember } from "@/types/workspaceMember";
 
+import { getMediaUrl } from "@/lib/media";
+
 type MemberRowProps = {
   member: WorkspaceMember;
   isCurrentUser: boolean;
@@ -23,12 +25,14 @@ export default function MemberRow({
   const [confirmRemove, setConfirmRemove] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const initials = member.user.name
+  const initials = (member.user.name || "User")
     .split(" ")
     .map((name) => name[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
+
+  const avatarUrl = getMediaUrl(member.user.avatar);
 
   const handleChangeRole = async () => {
     try {
@@ -65,10 +69,20 @@ export default function MemberRow({
   return (
     <>
       <div className="relative flex items-center gap-5 px-6 py-5">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gray-100 text-sm font-semibold text-gray-500">
-          {initials}
+        {/* Avatar */}
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100 text-sm font-semibold text-gray-500">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={`${member.user.name} avatar`}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            initials
+          )}
         </div>
 
+        {/* Member information */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <p className="truncate text-sm font-semibold text-gray-900">
@@ -87,17 +101,21 @@ export default function MemberRow({
           </p>
         </div>
 
+        {/* Role */}
         <span className="hidden rounded-full bg-gray-100 px-3 py-1 text-xs font-medium capitalize text-gray-600 sm:inline-flex">
           {member.role}
         </span>
 
+        {/* Menu */}
         {!isCurrentUser && member.role !== "owner" && (
           <div className="relative">
             <button
               type="button"
               aria-label={`${member.user.name} options`}
               disabled={loading}
-              onClick={() => setMenuOpen((current) => !current)}
+              onClick={() =>
+                setMenuOpen((current) => !current)
+              }
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-gray-900 disabled:opacity-50"
             >
               <span className="text-lg leading-none">
@@ -136,6 +154,7 @@ export default function MemberRow({
         )}
       </div>
 
+      {/* Remove confirmation */}
       {confirmRemove && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">

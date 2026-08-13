@@ -4,13 +4,16 @@ export const getWorkspaceMembers = async (req, res) => {
     try {
         const members = await WorkspaceMember.find({
             workspace: req.workspace._id,
-        }).populate("user", "name email");
+        }).populate("user", "name email avatar");
 
         return res.status(200).json({
             members,
         });
     } catch (error) {
-        console.error("Error fetching workspace members:", error);
+        console.error(
+            "Error fetching workspace members:",
+            error
+        );
 
         return res.status(500).json({
             message: "Internal server error",
@@ -45,7 +48,10 @@ export const removeMember = async (req, res) => {
             message: "Member removed successfully",
         });
     } catch (error) {
-        console.error("Error removing member:", error);
+        console.error(
+            "Error removing member:",
+            error
+        );
 
         return res.status(500).json({
             message: "Internal server error",
@@ -77,7 +83,8 @@ export const updateMemberRole = async (req, res) => {
 
         if (membership.role === "owner") {
             return res.status(400).json({
-                message: "Workspace owner role cannot be changed",
+                message:
+                    "Workspace owner role cannot be changed",
             });
         }
 
@@ -85,16 +92,20 @@ export const updateMemberRole = async (req, res) => {
 
         await membership.save();
 
-        const updatedMembership = await WorkspaceMember.findById(
-            membership._id
-        ).populate("user", "name email");
+        const updatedMembership =
+            await WorkspaceMember.findById(
+                membership._id
+            ).populate("user", "name email avatar");
 
         return res.status(200).json({
             message: "Member role updated successfully",
             membership: updatedMembership,
         });
     } catch (error) {
-        console.error("Error updating member role:", error);
+        console.error(
+            "Error updating member role:",
+            error
+        );
 
         return res.status(500).json({
             message: "Internal server error",

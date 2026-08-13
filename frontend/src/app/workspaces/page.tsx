@@ -81,54 +81,7 @@ export default function WorkspacesPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f8f6]">
-      {/* Global Header */}
-      <header className="border-b border-black/5 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          <Link
-            href="/"
-            className="
-              text-lg
-              font-semibold
-              tracking-tight
-              text-gray-950
-            "
-          >
-            NovaFlow
-          </Link>
-
-          <nav className="flex items-center gap-2">
-            <Link
-              href="/"
-              className="
-                rounded-xl
-                px-4 py-2
-                text-sm font-medium
-                text-gray-600
-                transition
-                hover:bg-gray-100
-                hover:text-gray-950
-              "
-            >
-              Home
-            </Link>
-
-            <Link
-              href="/profile"
-              className="
-                rounded-xl
-                px-4 py-2
-                text-sm font-medium
-                text-gray-600
-                transition
-                hover:bg-gray-100
-                hover:text-gray-950
-              "
-            >
-              Profile
-            </Link>
-          </nav>
-        </div>
-      </header>
+      
 
       {/* Main */}
       <main className="px-6 py-12">
@@ -303,14 +256,6 @@ export default function WorkspacesPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-black/5 py-6">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <p className="text-xs text-gray-400">
-            NovaFlow
-          </p>
-        </div>
-      </footer>
 
       {/* Create */}
       {showCreateModal && (
