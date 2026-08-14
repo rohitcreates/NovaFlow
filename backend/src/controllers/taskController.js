@@ -87,7 +87,10 @@ export const getTaskById = async (req, res) => {
             _id: taskId,
             project: req.project._id,
             archived: false,
-        });
+        }).populate(
+            "assignees",
+            "name email avatar"
+        );
 
         if (!task) {
             return res.status(404).json({
@@ -168,7 +171,12 @@ export const updateTask = async (req, res) => {
 
         await task.save();
 
-        return res.status(200).json(task);
+        await task.populate(
+            "assignees",
+            "name email avatar"
+        );
+
+return res.status(200).json(task);
     } catch (error) {
         console.error("Error updating task:", error);
 

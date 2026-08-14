@@ -14,7 +14,7 @@ import {
 } from "../middleware/workspacePermissionMiddleware.js";
 import { loadProject } from "../middleware/projectMiddleware.js";
 import { loadTask } from "../middleware/taskMiddleware.js";
-import upload from "../middleware/uploadMiddleware.js";
+import upload from "../middleware/taskAttachmentUploadMiddleware.js";
 
 const router = express.Router();
 

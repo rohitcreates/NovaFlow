@@ -26,8 +26,11 @@ export const uploadTaskAttachment = async (req, res) => {
 
         return res.status(201).json({
             message: "Attachment uploaded successfully",
-            attachment,
-        });
+            attachment: {
+                ...attachment.toObject(),
+                file: `/uploads/tasks/${attachment.storedName}`,
+            },
+            });
     } catch (error) {
         console.error("Error uploading attachment:", error);
 
@@ -49,8 +52,15 @@ export const getTaskAttachments = async (req, res) => {
             .populate("uploadedBy", "name email")
             .sort({ createdAt: -1 });
 
+        const attachmentData = attachments.map(
+            (attachment) => ({
+                ...attachment.toObject(),
+                file: `/uploads/tasks/${attachment.storedName}`,
+            })
+        );
+
         return res.status(200).json({
-            attachments,
+            attachments: attachmentData,
         });
     } catch (error) {
         console.error("Error getting task attachments:", error);

@@ -16,7 +16,7 @@ export const createTaskComment = async (req, res) => {
             content: content.trim(),
         });
 
-        await comment.populate("user", "name email");
+        await comment.populate("user", "name email avatar");
 
         return res.status(201).json({
             message: "Comment created successfully",
@@ -36,7 +36,7 @@ export const getTaskComments = async (req, res) => {
         const comments = await TaskComment.find({
             task: req.task._id,
         })
-            .populate("user", "name email")
+            .populate("user", "name email avatar")
             .sort({ createdAt: 1 });
 
         return res.status(200).json({
@@ -83,7 +83,7 @@ export const updateTaskComment = async (req, res) => {
 
         await comment.save();
 
-        await comment.populate("user", "name email");
+        await comment.populate("user", "name email avatar");
 
         return res.status(200).json({
             message: "Comment updated successfully",
