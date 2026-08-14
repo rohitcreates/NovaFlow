@@ -16,7 +16,7 @@ export const createProjectComment = async (req, res) => {
             content: content.trim(),
         });
 
-        await comment.populate("user", "name email");
+        await comment.populate("user", "name email avatar");
 
         return res.status(201).json({
             message: "Project comment created successfully",
@@ -36,7 +36,7 @@ export const getProjectComments = async (req, res) => {
         const comments = await ProjectComment.find({
             project: req.project._id,
         })
-            .populate("user", "name email")
+            .populate("user", "name email avatar")
             .sort({ createdAt: 1 });
 
         return res.status(200).json({
@@ -86,7 +86,7 @@ export const updateProjectComment = async (req, res) => {
 
         await comment.save();
 
-        await comment.populate("user", "name email");
+        await comment.populate("user", "name email avatar");
 
         return res.status(200).json({
             message: "Project comment updated successfully",

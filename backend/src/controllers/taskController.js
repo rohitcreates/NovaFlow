@@ -65,8 +65,10 @@ export const getTasks = async (req, res) => {
         const tasks = await Task.find({
             project: projectId,
             archived: false,
-        });
-
+        }).populate(
+            "assignees",
+            "name email avatar"
+        );
         return res.status(200).json(tasks);
     } catch (error) {
         console.error("Error getting tasks:", error);

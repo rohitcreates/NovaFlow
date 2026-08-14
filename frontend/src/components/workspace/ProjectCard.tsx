@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
+
 import type { Project } from "@/types/project";
+
 import {
   updateProject,
   archiveProject,
@@ -9,6 +12,7 @@ import {
 
 type ProjectCardProps = {
   project: Project;
+
   onUpdate?: (
     projectId: string,
     data: {
@@ -17,6 +21,7 @@ type ProjectCardProps = {
       status: "planning" | "in-progress" | "completed";
     }
   ) => Promise<void>;
+
   onArchive?: (projectId: string) => Promise<void>;
 };
 
@@ -24,8 +29,10 @@ function getStatusLabel(status: Project["status"]) {
   switch (status) {
     case "in-progress":
       return "In Progress";
+
     case "completed":
       return "Completed";
+
     default:
       return "Planning";
   }
@@ -35,8 +42,10 @@ function getStatusClasses(status: Project["status"]) {
   switch (status) {
     case "in-progress":
       return "bg-blue-50 text-blue-700";
+
     case "completed":
       return "bg-green-50 text-green-700";
+
     default:
       return "bg-gray-100 text-gray-600";
   }
@@ -47,19 +56,23 @@ export default function ProjectCard({
   onUpdate,
   onArchive,
 }: ProjectCardProps) {
-  const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
+  const SERVER_URL =
+    process.env.NEXT_PUBLIC_SERVER_URL;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const [name, setName] = useState(project.name);
-  const [description, setDescription] = useState(
-    project.description ?? ""
-  );
+
+  const [description, setDescription] =
+    useState(project.description ?? "");
+
   const [status, setStatus] = useState<
     "planning" | "in-progress" | "completed"
   >(project.status);
+
+  const projectUrl = `/workspaces/${project.workspace}/projects/${project._id}`;
 
   const handleEdit = () => {
     setMenuOpen(false);
@@ -97,7 +110,10 @@ export default function ProjectCard({
 
       setEditOpen(false);
     } catch (error) {
-      console.error("Failed to update project:", error);
+      console.error(
+        "Failed to update project:",
+        error
+      );
     } finally {
       setSaving(false);
     }
@@ -124,27 +140,37 @@ export default function ProjectCard({
         );
       }
     } catch (error) {
-      console.error("Failed to archive project:", error);
+      console.error(
+        "Failed to archive project:",
+        error
+      );
     }
   };
 
   return (
     <>
       <article className="overflow-visible rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+        {/* Cover */}
         <div className="relative h-48 overflow-hidden rounded-t-2xl bg-gray-200">
-          {project.coverImage ? (
-            <img
-              src={`${SERVER_URL}${project.coverImage}`}
-              alt={`${project.name} cover`}
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="h-full w-full bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400" />
-          )}
+          <Link
+            href={projectUrl}
+            className="absolute inset-0"
+          >
+            {project.coverImage ? (
+              <img
+                src={`${SERVER_URL}${project.coverImage}`}
+                alt={`${project.name} cover`}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400" />
+            )}
 
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          </Link>
 
-          <div className="absolute right-4 top-4">
+          {/* Project menu */}
+          <div className="absolute right-4 top-4 z-10">
             <button
               type="button"
               aria-label={`${project.name} options`}
@@ -180,7 +206,11 @@ export default function ProjectCard({
           </div>
         </div>
 
-        <div className="p-5">
+        {/* Project information */}
+        <Link
+          href={projectUrl}
+          className="block rounded-b-2xl p-5 transition hover:bg-gray-50"
+        >
           <h3 className="text-lg font-semibold text-gray-950">
             {project.name}
           </h3>
@@ -203,9 +233,10 @@ export default function ProjectCard({
               Tasks
             </span>
           </div>
-        </div>
+        </Link>
       </article>
 
+      {/* Edit Project Modal */}
       {editOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4">
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
@@ -293,7 +324,9 @@ export default function ProjectCard({
                 onClick={handleSave}
                 className="rounded-xl bg-gray-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {saving ? "Saving..." : "Save Changes"}
+                {saving
+                  ? "Saving..."
+                  : "Save Changes"}
               </button>
             </div>
           </div>
