@@ -198,16 +198,8 @@ const handlePriorityChange = async (
           <div className="mt-3">
             <AssigneeSelector
               task={task}
-              workspaceId={workspaceId}
-              projectId={projectId}
               members={members}
-              onUpdated={async () => {
-                await onUpdate({
-                  assignees: task.assignees.map(
-                    (assignee) => assignee._id
-                  ),
-                });
-              }}
+              onUpdate={onUpdate}
             />
           </div>
         </div>

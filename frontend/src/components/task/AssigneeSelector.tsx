@@ -1,31 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import type { Task } from "@/types/task";
 import type { WorkspaceMember } from "@/types/workspaceMember";
+import type { UpdateTaskData } from "@/services/taskService";
 
 import { getMediaUrl } from "@/lib/media";
-import { updateTask } from "@/services/taskService";
 
 type AssigneeSelectorProps = {
   task: Task;
-  workspaceId: string;
-  projectId: string;
   members: WorkspaceMember[];
-  onUpdated: (task: Task) => void;
+  onUpdate: (data: UpdateTaskData) => Promise<void>;
 };
 
 export default function AssigneeSelector({
   task,
-  workspaceId,
-  projectId,
   members,
-  onUpdated,
+  onUpdate,
 }: AssigneeSelectorProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [saving, setSaving] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const assignedIds = new Set(
     task.assignees.map((assignee) => assignee._id)
@@ -55,28 +51,32 @@ export default function AssigneeSelector({
       ? task.assignees
           .filter((assignee) => assignee._id !== memberId)
           .map((assignee) => assignee._id)
-      : [...task.assignees.map((assignee) => assignee._id), memberId];
+      : [
+          ...task.assignees.map(
+            (assignee) => assignee._id
+          ),
+          memberId,
+        ];
+
+    console.log("CLICKED MEMBER:", memberId);
+    console.log("CURRENT ASSIGNEES:", task.assignees);
+    console.log("NEXT ASSIGNEES:", nextAssignees);
 
     try {
-      setSaving(memberId);
+      setSaving(true);
 
-      const updatedTask = await updateTask(
-        workspaceId,
-        projectId,
-        task._id,
-        {
-          assignees: nextAssignees,
-        }
-      );
+      await onUpdate({
+        assignees: nextAssignees,
+      });
 
-      onUpdated(updatedTask);
+      console.log("ASSIGNEES UPDATED");
     } catch (error) {
       console.error(
         "Failed to update task assignees:",
         error
       );
     } finally {
-      setSaving(null);
+      setSaving(false);
     }
   };
 
@@ -129,8 +129,8 @@ export default function AssigneeSelector({
                   onClick={() =>
                     handleToggle(assignee._id)
                   }
-                  disabled={saving === assignee._id}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                  disabled={saving}
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-gray-400 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                   aria-label={`Remove ${assignee.name}`}
                 >
                   ×
@@ -150,7 +150,8 @@ export default function AssigneeSelector({
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="text-sm font-medium text-gray-700 transition hover:text-gray-950"
+          disabled={saving}
+          className="text-sm font-medium text-gray-700 transition hover:text-gray-950 disabled:opacity-50"
         >
           + Add Assignee
         </button>
@@ -173,6 +174,7 @@ export default function AssigneeSelector({
               {filteredMembers.length > 0 ? (
                 filteredMembers.map((member) => {
                   const user = member.user;
+
                   const isAssigned = assignedIds.has(
                     user._id
                   );
@@ -195,8 +197,8 @@ export default function AssigneeSelector({
                       onClick={() =>
                         handleToggle(user._id)
                       }
-                      disabled={saving === user._id}
-                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-gray-50 disabled:opacity-50"
+                      disabled={saving}
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-100 text-[10px] font-semibold text-gray-500">
                         {avatarUrl ? (

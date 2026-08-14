@@ -61,6 +61,9 @@ export async function updateTask(
   taskId: string,
   taskData: UpdateTaskData
 ) {
+  console.log("UPDATE TASK DATA:", taskData);
+  console.trace("UPDATE TASK CALLED FROM:");
+
   return apiFetch(
     `/workspaces/${workspaceId}/projects/${projectId}/tasks/${taskId}`,
     {
