@@ -28,7 +28,7 @@ export default function HomePage() {
 
         <p className="mt-6 max-w-2xl text-base leading-7 text-gray-500 sm:text-lg">
           A focused workspace for managing projects, tasks,
-          documentation, and collaboration without the clutter.
+          documantion, and collaboration without the clutter.
         </p>
 
         <div className="mt-10 flex flex-col items-center">

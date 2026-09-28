@@ -2,7 +2,7 @@ import express from "express";
 import { registerUser } from "../controllers/authController.js";
 import { loginUser } from "../controllers/authController.js";
 import { getMe, 
-    updateMe, uploadAvatar,
+    updateMe, uploadAvatar, forgotPassword, resetPassword, changePassword,
  } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import avatarUpload from "../middleware/uploadMiddleware.js";
@@ -14,5 +14,7 @@ router.get("/me", protect, getMe);
 router.put("/me", protect, updateMe);
 router.post("/me/avatar", protect, avatarUpload.single("avatar"), uploadAvatar);
 router.post("/login", loginUser);
-
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
+router.put("/change-password", protect, changePassword);
 export default router;

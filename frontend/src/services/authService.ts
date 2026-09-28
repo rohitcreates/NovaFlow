@@ -32,3 +32,44 @@ export async function loginUser(
     body: JSON.stringify(data),
   });
 }
+
+type ForgotPasswordData = {
+  email: string;
+};
+
+type ResetPasswordData = {
+  password: string;
+};
+
+type ChangePasswordData = {
+  currentPassword: string;
+  newPassword: string;
+};
+
+export async function changePassword(
+  data: ChangePasswordData
+) {
+  return apiFetch("/auth/change-password", {
+    method: "PUT",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function forgotPassword(
+  data: ForgotPasswordData
+) {
+  return apiFetch("/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function resetPassword(
+  token: string,
+  data: ResetPasswordData
+) {
+  return apiFetch(`/auth/reset-password/${token}`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}

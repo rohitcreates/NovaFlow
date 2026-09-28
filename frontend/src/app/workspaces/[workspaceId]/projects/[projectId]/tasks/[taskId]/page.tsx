@@ -19,7 +19,7 @@ import {
   getTaskComments,
   createTaskComment,
   updateTaskComment,
-  deleteTaskComment
+  deleteTaskComment,
 } from "@/services/taskCommentService";
 
 import TaskHeader from "@/components/task/TaskHeader";

@@ -10,6 +10,7 @@ import { getMediaUrl } from "@/lib/media";
 import { getMyProfile } from "@/services/profileService";
 
 import EditProfileModal from "@/components/profile/EditProfileModal";
+import ChangePasswordModal from "@/components/profile/ChangePasswordModal";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -23,6 +24,9 @@ export default function ProfilePage() {
     useState<User | null>(null);
 
   const [isEditProfileOpen, setIsEditProfileOpen] =
+    useState(false);
+
+  const [isChangePasswordOpen, setIsChangePasswordOpen] =
     useState(false);
 
   const [loading, setLoading] = useState(true);
@@ -58,14 +62,13 @@ export default function ProfilePage() {
   const handleProfileSuccess = (
     updatedUser: User
   ) => {
-    // Update this page
     setProfile(updatedUser);
-
-    // Update Header / AuthContext / localStorage
     updateUser(updatedUser);
-
-    // Close modal
     setIsEditProfileOpen(false);
+  };
+
+  const handleChangePasswordSuccess = () => {
+    setIsChangePasswordOpen(false);
   };
 
   if (loading) {
@@ -134,7 +137,7 @@ export default function ProfilePage() {
           </h1>
 
           <p className="mt-2 text-sm text-gray-500">
-            Manage your personal information.
+            Manage your personal information and account security.
           </p>
         </div>
 
@@ -211,9 +214,46 @@ export default function ProfilePage() {
             </button>
           </div>
         </section>
+
+        {/* Security */}
+        <section className="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+          <div className="px-8 py-6">
+            <div>
+              <h2 className="text-base font-semibold text-gray-950">
+                Security
+              </h2>
+
+              <p className="mt-1 text-sm text-gray-500">
+                Manage your account security and password.
+              </p>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between gap-6 rounded-xl border border-gray-100 px-5 py-4">
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-900">
+                  Password
+                </p>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Keep your account secure with a strong password.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setIsChangePasswordOpen(true)
+                }
+                className="shrink-0 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              >
+                Change Password
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
 
-   
+      {/* Edit Profile Modal */}
       {isEditProfileOpen && (
         <EditProfileModal
           user={profile}
@@ -221,6 +261,16 @@ export default function ProfilePage() {
             setIsEditProfileOpen(false)
           }
           onSuccess={handleProfileSuccess}
+        />
+      )}
+
+      {/* Change Password Modal */}
+      {isChangePasswordOpen && (
+        <ChangePasswordModal
+          onClose={() =>
+            setIsChangePasswordOpen(false)
+          }
+          onSuccess={handleChangePasswordSuccess}
         />
       )}
     </main>

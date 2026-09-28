@@ -12,8 +12,10 @@ export default function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
   const isAuthPage =
-    pathname === "/login" ||
-    pathname === "/register";
+  pathname === "/login" ||
+  pathname === "/register" ||
+  pathname === "/forgot-password" ||
+  pathname.startsWith("/reset-password");
 
   if (isAuthPage) {
     return <>{children}</>;
