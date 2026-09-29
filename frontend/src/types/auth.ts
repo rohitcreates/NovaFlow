@@ -1,8 +1,4 @@
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-};
+import type { User } from "./user";
 
 export type AuthResponse = {
   token: string;
