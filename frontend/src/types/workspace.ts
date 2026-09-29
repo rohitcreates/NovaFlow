@@ -1,5 +1,5 @@
 export type WorkspaceRole = "owner" | "member" | "viewer";
-import type { User } from "./auth";
+import type { User } from "./user";
 
 export type Workspace = {
   _id: string;
