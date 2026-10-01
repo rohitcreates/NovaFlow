@@ -96,6 +96,19 @@ NovaFlow/
         ├── services/
         └── types/
 
+## Screenshots
+
+### Workspace
+
+![NovaFlow Workspace](./screenshots/workspace.png)
+
+### Project Management
+
+![NovaFlow Project](./screenshots/project.png)
+
+### Task Management
+
+![NovaFlow Task](./screenshots/task.png)
 
 Getting Started
 Prerequisites
